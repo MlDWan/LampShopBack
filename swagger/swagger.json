@@ -1,0 +1,387 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "1.0.0",
+    "title": "My User Project CRUD",
+    "description": "My User Project Application API",
+    "license": {
+      "name": "MIT",
+      "url": "https://opensource.org/licenses/MIT"
+    }
+  },
+  "host": "localhost:3000",
+  "basePath": "/",
+  "tags": [
+    {
+      "name": "Users",
+      "description": "API for users in the system"
+    },
+    {
+      "name": "Products",
+      "description": "API for products"
+    },
+    {
+      "name": "Carts",
+      "description": "API for carts"
+    }
+  ],
+  "schemes": ["http"],
+  "consumes": ["application/json"],
+  "produces": ["application/json"],
+
+  "paths": {
+    "/api/users/registration": {
+      "post": {
+        "tags": ["Users"],
+        "description": "Create new user in system",
+        "parameters": [
+          {
+            "name": "user",
+            "in": "body",
+            "description": "User that we want to create",
+            "schema": {
+              "$ref": "#/definitions/user"
+            }
+          }
+        ],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "New user is created"
+          }
+        }
+      }
+    },
+
+    "/api/users/login": {
+      "post": {
+        "tags": ["Users"],
+        "description": "User authorization in system",
+        "parameters": [
+          {
+            "name": "user",
+            "in": "body",
+            "description": "",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "email": {
+                  "type": "string"
+                },
+                "password": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        ],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "Successful authorization"
+          }
+        }
+      }
+    },
+
+    "/api/products/create": {
+      "post": {
+        "tags": ["Products"],
+        "description": "Adding a new item to the database",
+        "security": [
+          {
+            "apiKey": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "user",
+            "in": "body",
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/product"
+            }
+          }
+        ],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "Item added"
+          }
+        }
+      }
+    },
+
+    "/api/products/all": {
+      "get": {
+        "tags": ["Products"],
+        "description": "getting a list of all products",
+        "responses": {
+          "200": {
+            "description": "List of all products in the database",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/product"
+              }
+            }
+          }
+        }
+      }
+    },
+
+    "/api/products/info/{_id}": {
+      "get": {
+        "tags": ["Products"],
+        "description": "Obtaining information about the product",
+        "parameters": [
+          {
+            "name": "_id",
+            "in": "path",
+            "description": "",
+            "schema": {
+              "_id": {
+                "type": "string"
+              }
+            }
+          }
+        ],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "Information about product"
+          }
+        }
+      }
+    },
+
+    "/api/products/change/{_id}": {
+      "put": {
+        "tags": ["Products"],
+        "description": "Change product",
+        "security": [
+          {
+            "apiKey": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "user",
+            "in": "formData",
+            "type": "file",
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/product"
+            }
+          }
+        ],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "Modifieded successful"
+          }
+        }
+      }
+    },
+
+    "/api/products/delete/{_id}": {
+      "delete": {
+        "tags": ["Products"],
+        "description": "Remove product",
+        "security": [
+          {
+            "apiKey": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "_id",
+            "in": "path",
+            "description": "",
+            "schema": {
+              "_id": {
+                "type": "string"
+              }
+            }
+          }
+        ],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "Deleted successful"
+          }
+        }
+      }
+    },
+
+    "/api/carts/delete/{idCart}/{productId}": {
+      "delete": {
+        "tags": ["Carts"],
+        "description": "emptying the cart",
+        "security": [
+          {
+            "apiKey": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "idCart",
+            "in": "path",
+            "description": "",
+            "schema": {
+              "_id": {
+                "type": "string"
+              }
+            }
+          },
+          {
+            "name": "productId",
+            "in": "path",
+            "description": "",
+            "schema": {
+              "_id": {
+                "type": "string"
+              }
+            }
+          }
+        ],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "Products removed"
+          }
+        }
+      }
+    },
+
+    "/api/carts/add-product/{userId}": {
+      "post": {
+        "tags": ["Carts"],
+        "description": "Adding a product",
+        "security": [
+          {
+            "apiKey": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "description": "",
+            "schema": {
+              "userId": {
+                "type": "string"
+              }
+            }
+          },
+          {
+            "name": "user",
+            "in": "body",
+            "description": "",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "productId": {
+                  "type": "string"
+                },
+                "amount": {
+                  "type": "number"
+                }
+              }
+            }
+          }
+        ],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "Product added"
+          }
+        }
+      }
+    },
+
+    "/api/carts/cart-user/{userId}": {
+      "get": {
+        "tags": ["Carts"],
+        "description": "Cart search",
+        "security": [
+          {
+            "apiKey": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "description": "",
+            "schema": {
+              "_id": {
+                "type": "string"
+              }
+            }
+          }
+        ],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        }
+      }
+    }
+  },
+
+  "definitions": {
+    "user": {
+      "required": ["userName", "email", "password"],
+      "properties": {
+        "_id": {
+          "type": "string",
+          "uniqueItems": true
+        },
+        "userName": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string",
+          "uniqueItems": true
+        },
+        "password": {
+          "type": "string"
+        },
+        "isAdmin": {
+          "type": "boolean",
+          "default": "false"
+        }
+      }
+    },
+
+    "product": {
+      "properties": {
+        "productName": {
+          "type": "string"
+        },
+        "price": {
+          "type": "number"
+        },
+        "description": {
+          "type": "string"
+        },
+        "image": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string"
+            },
+            "url": {
+              "type": "string"
+            }
+          }
+        },
+        "amount": {
+          "type": "number"
+        }
+      }
+    }
+  }
+}
